@@ -10,7 +10,8 @@ class Login extends Component {
     this.signup = this.signup.bind(this);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      loading: false,
     };
   }
 
@@ -19,24 +20,37 @@ class Login extends Component {
   }
 
   login(e) {
+    this.setState({ loading:true });
     e.preventDefault();
     fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
+      this.setState({ loading:false });
     }).catch((error) => {
         console.log(error);
       });
   }
 
   signup(e){
+    this.setState({ loading:true });
     e.preventDefault();
     fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
-    }).then((u)=>{console.log(u)})
+    }).then((u)=>{
+      this.setState({ loading:false });
+    })
     .catch((error) => {
         console.log(error);
       })
   }
+  
   render() {
     return (
       <div className="col-md-6">
+      
+        {this.state.loading ?
+         <div class="alert bg-white text-center shadow-sm rounded border p-3" role="alert">
+           Loading ...
+          </div>
+        : null }
+      
         <form>
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
